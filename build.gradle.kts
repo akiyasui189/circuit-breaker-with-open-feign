@@ -29,11 +29,20 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	// OpenFeign
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+	implementation("io.github.openfeign:feign-httpclient")
+	implementation("io.github.openfeign:feign-okhttp")
+	// Resilience4j
 	implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j")
+	// Hystrix
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-hystrix")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard")
-	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+	// for swagger ui using spring fox
+	implementation("io.springfox:springfox-boot-starter:3.0.0")
+	// dev
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
