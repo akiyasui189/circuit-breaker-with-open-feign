@@ -5,5 +5,6 @@ data class BaseResponse (
         val code: String,
         val message: String,
         val processingTimeSeconds: Double,
+        val isFallback: Boolean,
         val isCircuitBreakerOpen: Boolean
 )

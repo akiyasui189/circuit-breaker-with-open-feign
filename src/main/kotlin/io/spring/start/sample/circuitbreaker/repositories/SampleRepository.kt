@@ -58,6 +58,7 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
@@ -65,6 +66,7 @@ class SampleRepository (
      */
 
     fun getError() : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             alwaysFailClient.alwaysFail()
@@ -74,12 +76,14 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun getStubResponse() : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             val stubBaseResponse = alwaysFailWithFallbackClient.alwaysFail().body
@@ -87,7 +91,8 @@ class SampleRepository (
             if (stubBaseResponse.processingTimeSeconds.equals(0.000f)) {
                 return ApiCallResult(
                         isSucceed = false,
-                        isCircuitBreaker = true,
+                        isFallback = true,
+                        isCircuitBreaker = false,
                         processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
                 )
             }
@@ -97,12 +102,14 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun randomFail() : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             randomFailClient.randomFail()
@@ -112,12 +119,14 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun randomFailWithFallback() : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             val stubBaseResponse = randomFailWithFallbackClient.randomFail().body
@@ -125,7 +134,8 @@ class SampleRepository (
             if (stubBaseResponse.processingTimeSeconds.equals(0.000f)) {
                 return ApiCallResult(
                         isSucceed = false,
-                        isCircuitBreaker = true,
+                        isFallback = true,
+                        isCircuitBreaker = false,
                         processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
                 )
             }
@@ -135,12 +145,14 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun succeedOrFail(isFail: Boolean) : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             succeedOrFailClient.succeedOrFail(isFail)
@@ -150,12 +162,14 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun succeedOrFailWithFallback(isFail: Boolean) : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             val stubBaseResponse = succeedOrFailWithFallbackClient.succeedOrFail(isFail).body
@@ -163,7 +177,8 @@ class SampleRepository (
             if (stubBaseResponse.processingTimeSeconds.equals(0.000f)) {
                 return ApiCallResult(
                         isSucceed = false,
-                        isCircuitBreaker = true,
+                        isFallback = true,
+                        isCircuitBreaker = false,
                         processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
                 )
             }
@@ -173,12 +188,14 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun waitTime(seconds: Long) : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             waitTimeClient.waitTime(seconds)
@@ -188,12 +205,14 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun testReadTimeOutSettingCase0() : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             waitTimeClient.waitTime(0L)
@@ -203,12 +222,14 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun testReadTimeOutSettingCase1() : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             waitTimeClient.waitTime(1L)
@@ -216,18 +237,21 @@ class SampleRepository (
             logger.info("status: " + e.status() + ", response: " + e.contentUTF8(), e)
             return ApiCallResult(
                     isSucceed = false,
+                    isFallback = false,
                     isCircuitBreaker = false,
                     processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
             )
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun testReadTimeOutSettingCase2() : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             waitTimeClient.waitTime(2L)
@@ -235,18 +259,21 @@ class SampleRepository (
             logger.info("status: " + e.status() + ", response: " + e.contentUTF8(), e)
             return ApiCallResult(
                     isSucceed = false,
+                    isFallback = false,
                     isCircuitBreaker = false,
                     processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
             )
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun testReadTimeOutSettingCase3() : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             waitTimeClient.waitTime(3L)
@@ -254,18 +281,21 @@ class SampleRepository (
             logger.info("status: " + e.status() + ", response: " + e.contentUTF8(), e)
             return ApiCallResult(
                     isSucceed = false,
+                    isFallback = false,
                     isCircuitBreaker = false,
                     processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
             )
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun waitTimeV2(seconds: Long) : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             waitTimeClientV2.waitTime(seconds)
@@ -275,12 +305,14 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )
     }
 
     fun waitTimeV3(seconds: Long) : ApiCallResult {
+        logger.info("Execute Api Request.")
         val startTimeMillis = System.currentTimeMillis()
         try {
             waitTimeClientV3.waitTime(seconds)
@@ -290,6 +322,7 @@ class SampleRepository (
         }
         return ApiCallResult(
                 isSucceed = true,
+                isFallback = false,
                 isCircuitBreaker = false,
                 processingTimeSeconds = (System.currentTimeMillis() - startTimeMillis).toFloat() / 1000.toFloat()
         )

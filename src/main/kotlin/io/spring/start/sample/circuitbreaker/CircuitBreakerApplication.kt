@@ -13,9 +13,11 @@ import io.spring.start.sample.circuitbreaker.clients.WaitTimeClientV3
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard
 import org.springframework.cloud.openfeign.EnableFeignClients
 
 @EnableCircuitBreaker
+@EnableHystrixDashboard
 @EnableFeignClients(
         clients = [
             AlwaysFailClient::class,

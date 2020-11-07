@@ -24,6 +24,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                     "01001001",
                     "NG",
                     (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                    result.isFallback,
                     result.isCircuitBreaker
             )
         }
@@ -32,6 +33,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -40,7 +42,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
     fun getStubResponse() : BaseResponse {
         val startTime = System.currentTimeMillis()
         val result : ApiCallResult = useCase.getStubResponse()
-        if (!result.isSucceed && !result.isCircuitBreaker) {
+        if (!result.isSucceed && !result.isFallback) {
             logger.error("processing time: " + result.processingTimeSeconds)
             throw RuntimeException("Read Time Out")
         }
@@ -49,6 +51,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -66,6 +69,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -74,7 +78,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
     fun randomFailWithFallback() : BaseResponse {
         val startTime = System.currentTimeMillis()
         val result : ApiCallResult = useCase.randomFailWithFallback()
-        if (!result.isSucceed && !result.isCircuitBreaker) {
+        if (!result.isSucceed && !result.isFallback) {
             logger.error("processing time: " + result.processingTimeSeconds)
             throw RuntimeException("Read Time Out")
         }
@@ -83,6 +87,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -100,6 +105,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -108,7 +114,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
     fun succeedOrFailWithFallback(@RequestParam("fail") isFail: Boolean) : BaseResponse {
         val startTime = System.currentTimeMillis()
         val result : ApiCallResult = useCase.succeedOrFailWithFallback(isFail)
-        if (!result.isSucceed && !result.isCircuitBreaker) {
+        if (!result.isSucceed && !result.isFallback) {
             logger.error("processing time: " + result.processingTimeSeconds)
             throw RuntimeException("Read Time Out")
         }
@@ -117,6 +123,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -135,6 +142,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -153,6 +161,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -170,6 +179,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -187,6 +197,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -204,6 +215,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -221,6 +233,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -238,6 +251,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -255,6 +269,7 @@ class SampleController (val useCase: SampleUseCase, val logger: Logger) {
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }

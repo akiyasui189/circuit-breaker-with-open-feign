@@ -19,12 +19,13 @@ class HystrixSampleController (val hystrixSampleUseCase: HystrixSampleUseCase, v
     fun getProcessingTime() : BaseResponse {
         val startTime = System.currentTimeMillis()
         val result : ApiCallResult = hystrixSampleUseCase.getError()
-        if (!result.isSucceed && !result.isCircuitBreaker) {
+        if (!result.isSucceed && !result.isFallback) {
             return BaseResponse(
                     "F",
                     "01001001",
                     "NG",
                     (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                    result.isFallback,
                     result.isCircuitBreaker
             )
         }
@@ -33,6 +34,7 @@ class HystrixSampleController (val hystrixSampleUseCase: HystrixSampleUseCase, v
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -41,7 +43,7 @@ class HystrixSampleController (val hystrixSampleUseCase: HystrixSampleUseCase, v
     fun randomFail() : BaseResponse {
         val startTime = System.currentTimeMillis()
         val result : ApiCallResult = hystrixSampleUseCase.randomFail()
-        if (!result.isSucceed && !result.isCircuitBreaker) {
+        if (!result.isSucceed && !result.isFallback) {
             logger.error("processing time: " + result.processingTimeSeconds)
             throw RuntimeException("Read Time Out")
         }
@@ -50,6 +52,7 @@ class HystrixSampleController (val hystrixSampleUseCase: HystrixSampleUseCase, v
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -58,7 +61,7 @@ class HystrixSampleController (val hystrixSampleUseCase: HystrixSampleUseCase, v
     fun succeedOrFail(@RequestParam("fail") isFail: Boolean) : BaseResponse {
         val startTime = System.currentTimeMillis()
         val result : ApiCallResult = hystrixSampleUseCase.succeedOrFail(isFail)
-        if (!result.isSucceed && !result.isCircuitBreaker) {
+        if (!result.isSucceed && !result.isFallback) {
             logger.error("processing time: " + result.processingTimeSeconds)
             throw RuntimeException("Read Time Out")
         }
@@ -67,6 +70,7 @@ class HystrixSampleController (val hystrixSampleUseCase: HystrixSampleUseCase, v
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }
@@ -75,7 +79,7 @@ class HystrixSampleController (val hystrixSampleUseCase: HystrixSampleUseCase, v
     fun waitTime(@RequestParam("seconds") seconds: Long) : BaseResponse {
         val startTime = System.currentTimeMillis()
         val result : ApiCallResult = hystrixSampleUseCase.waitTime(seconds)
-        if (!result.isSucceed && !result.isCircuitBreaker) {
+        if (!result.isSucceed && !result.isFallback) {
             logger.error("processing time: " + result.processingTimeSeconds)
             throw RuntimeException("Read Time Out")
         }
@@ -84,6 +88,7 @@ class HystrixSampleController (val hystrixSampleUseCase: HystrixSampleUseCase, v
                 "00000000",
                 "OK",
                 (System.currentTimeMillis() - startTime).toDouble() / 1000.toDouble(),
+                result.isFallback,
                 result.isCircuitBreaker
         )
     }

@@ -13,6 +13,8 @@ class HystrixSampleService (val sampleRepository: SampleRepository, val logger: 
 
     // Circuit Breaker by SEMAPHORE
     @HystrixCommand(
+            groupKey = "HystrixSample",
+            commandKey = "GetError",
             fallbackMethod = "getErrorFallback",
             commandProperties = [
                 HystrixProperty(name = HystrixPropertiesManager.EXECUTION_TIMEOUT_ENABLED, value = "false"),
@@ -22,8 +24,8 @@ class HystrixSampleService (val sampleRepository: SampleRepository, val logger: 
                 HystrixProperty(name = HystrixPropertiesManager.EXECUTION_ISOLATION_SEMAPHORE_MAX_CONCURRENT_REQUESTS, value = "2"),
                 HystrixProperty(name = HystrixPropertiesManager.METRICS_ROLLING_STATS_TIME_IN_MILLISECONDS, value = "10000"),
                 HystrixProperty(name = HystrixPropertiesManager.METRICS_ROLLING_PERCENTILE_TIME_IN_MILLISECONDS, value = "10000"),
-                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_REQUEST_VOLUME_THRESHOLD, value = "100"),
-                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_SLEEP_WINDOW_IN_MILLISECONDS, value = "2"),
+                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_REQUEST_VOLUME_THRESHOLD, value = "10"),
+                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_SLEEP_WINDOW_IN_MILLISECONDS, value = "5000"),
                 HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_ERROR_THRESHOLD_PERCENTAGE, value = "50")
             ]
     )
@@ -33,6 +35,8 @@ class HystrixSampleService (val sampleRepository: SampleRepository, val logger: 
 
     // Circuit Breaker by THREAD
     @HystrixCommand(
+            groupKey = "HystrixSample",
+            commandKey = "RandomFail",
             fallbackMethod = "randomFailFallback",
             commandProperties = [
                 HystrixProperty(name = HystrixPropertiesManager.EXECUTION_TIMEOUT_ENABLED, value = "false"),
@@ -41,8 +45,8 @@ class HystrixSampleService (val sampleRepository: SampleRepository, val logger: 
                 HystrixProperty(name = HystrixPropertiesManager.EXECUTION_ISOLATION_STRATEGY, value = "THREAD"),
                 HystrixProperty(name = HystrixPropertiesManager.METRICS_ROLLING_STATS_TIME_IN_MILLISECONDS, value = "5000"),
                 HystrixProperty(name = HystrixPropertiesManager.METRICS_ROLLING_PERCENTILE_TIME_IN_MILLISECONDS, value = "10000"),
-                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_REQUEST_VOLUME_THRESHOLD, value = "5"),
-                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_SLEEP_WINDOW_IN_MILLISECONDS, value = "2"),
+                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_REQUEST_VOLUME_THRESHOLD, value = "10"),
+                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_SLEEP_WINDOW_IN_MILLISECONDS, value = "5000"),
                 HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_ERROR_THRESHOLD_PERCENTAGE, value = "50")
             ]
     )
@@ -52,7 +56,9 @@ class HystrixSampleService (val sampleRepository: SampleRepository, val logger: 
 
     // Circuit Breaker by THREAD
     @HystrixCommand(
-            fallbackMethod = "randomFailFallback",
+            groupKey = "HystrixSample",
+            commandKey = "SucceedOrFail",
+            fallbackMethod = "succeedOrFailFallback",
             commandProperties = [
                 HystrixProperty(name = HystrixPropertiesManager.EXECUTION_TIMEOUT_ENABLED, value = "false"),
                 HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_ENABLED, value = "true"),
@@ -60,8 +66,8 @@ class HystrixSampleService (val sampleRepository: SampleRepository, val logger: 
                 HystrixProperty(name = HystrixPropertiesManager.EXECUTION_ISOLATION_STRATEGY, value = "THREAD"),
                 HystrixProperty(name = HystrixPropertiesManager.METRICS_ROLLING_STATS_TIME_IN_MILLISECONDS, value = "5000"),
                 HystrixProperty(name = HystrixPropertiesManager.METRICS_ROLLING_PERCENTILE_TIME_IN_MILLISECONDS, value = "10000"),
-                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_REQUEST_VOLUME_THRESHOLD, value = "5"),
-                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_SLEEP_WINDOW_IN_MILLISECONDS, value = "2"),
+                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_REQUEST_VOLUME_THRESHOLD, value = "10"),
+                HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_SLEEP_WINDOW_IN_MILLISECONDS, value = "5000"),
                 HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_ERROR_THRESHOLD_PERCENTAGE, value = "50")
             ]
     )
@@ -71,12 +77,14 @@ class HystrixSampleService (val sampleRepository: SampleRepository, val logger: 
 
     // TimeLimiter
     @HystrixCommand(
+            groupKey = "HystrixSample",
+            commandKey = "WaitTime",
             fallbackMethod = "waitTimeFallback",
             commandProperties = [
                 HystrixProperty(name = HystrixPropertiesManager.CIRCUIT_BREAKER_ENABLED, value = "false"),
                 HystrixProperty(name = HystrixPropertiesManager.METRICS_ROLLING_PERCENTILE_ENABLED, value = "false"),
                 HystrixProperty(name = HystrixPropertiesManager.EXECUTION_TIMEOUT_ENABLED, value = "true"),
-                HystrixProperty(name = HystrixPropertiesManager.EXECUTION_ISOLATION_THREAD_TIMEOUT_IN_MILLISECONDS, value = "2000")
+                HystrixProperty(name = HystrixPropertiesManager.EXECUTION_ISOLATION_THREAD_TIMEOUT_IN_MILLISECONDS, value = "500")
             ]
     )
     fun waitTime(seconds: Long) : ApiCallResult {
@@ -84,6 +92,7 @@ class HystrixSampleService (val sampleRepository: SampleRepository, val logger: 
     }
 
     fun getErrorFallback() : ApiCallResult {
+        // RODO
         return getFallbackResponse()
     }
 
@@ -100,6 +109,7 @@ class HystrixSampleService (val sampleRepository: SampleRepository, val logger: 
     }
 
     private fun getFallbackResponse() : ApiCallResult {
-        return ApiCallResult(isSucceed = false, isCircuitBreaker = true, processingTimeSeconds = 0.000f)
+        logger.warn("Return Fallback Response.")
+        return ApiCallResult(isSucceed = false, isFallback = true, isCircuitBreaker = true, processingTimeSeconds = 0.000f)
     }
 }
