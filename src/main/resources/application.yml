@@ -55,3 +55,16 @@ feign:
     enabled: true
   okhttp:
     enabled: false
+resilience:
+  circuit-breaker:
+    sample:
+      failure-rate: 50
+      slow-call-millis: 3000
+      slow-call-rate: 50
+      ring-buffer-size: 100
+      minimum-number-of-calls: 5
+      ring-buffer-size-in-half: 10
+      wait-millis-in-open: 100000
+  time-limiter:
+    sample:
+      timeout-millis: 500
